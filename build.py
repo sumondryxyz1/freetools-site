@@ -17,8 +17,14 @@ import struct
 import zlib
 from pathlib import Path
 
-AD_HEADER = ""
-AD_INARTICLE = ""
+AD_HEADER = """
+<script src="https://pl31650611.profitableratecpmnetwork.com/26/98/69/26986910ba4ccafa9fa155977134a3ca.js"></script>
+<script src="https://pl31650613.profitableratecpmnetwork.com/33/c0/f9/33c0f9632f1aa63372172b2f925276a7.js"></script>
+"""
+AD_INARTICLE = """
+<script async="async" data-cfasync="false" src="https://pl31650614.profitableratecpmnetwork.com/4371774b26da680de16b6540d646292a/invoke.js"></script>
+<div id="container-4371774b26da680de16b6540d646292a"></div>
+"""
 AD_SIDEBAR = ""
 AD_FOOTER = ""
 
@@ -1200,6 +1206,757 @@ TOOLS = [
   }
 """,
     },
+    {
+        "slug": "text-repeater",
+        "name": "Text Repeater",
+        "title": "Free Text Repeater - Repeat Any Text Online",
+        "desc": "Repeat a word, sentence or line as many times as you need, with an optional separator. Runs entirely in your browser.",
+        "keywords": "text repeater, repeat text online, word repeater, repeat sentence multiple times",
+        "body": """
+      <div class="card">
+        <label for="tr-in">Text to repeat</label>
+        <textarea id="tr-in" rows="4" placeholder="Type text here..."></textarea>
+        <label for="tr-n">Times: <span id="tr-nv">10</span></label>
+        <input id="tr-n" type="range" min="1" max="500" value="10">
+        <label for="tr-sep">Separator</label>
+        <select id="tr-sep">
+          <option value="newline">New line</option>
+          <option value="space">Space</option>
+          <option value="none">None</option>
+        </select>
+        <button class="btn" onclick="trRun()">Repeat</button>
+        <div class="output" id="tr-out"></div>
+      </div>
+""",
+        "script": """
+  const trN = document.getElementById('tr-n');
+  trN.addEventListener('input', () => document.getElementById('tr-nv').textContent = trN.value);
+  function trRun() {
+    const text = document.getElementById('tr-in').value;
+    const n = parseInt(trN.value, 10);
+    const mode = document.getElementById('tr-sep').value;
+    const sep = mode === 'newline' ? '\\n' : (mode === 'space' ? ' ' : '');
+    const out = document.getElementById('tr-out');
+    if (!text) { out.textContent = 'Enter some text first.'; return; }
+    const result = Array(n).fill(text).join(sep);
+    out.innerHTML = '<textarea rows="8" id="tr-res"></textarea><br><button class="btn" onclick="trCopy()">Copy</button>';
+    document.getElementById('tr-res').value = result;
+  }
+  function trCopy() {
+    const el = document.getElementById('tr-res');
+    el.select();
+    document.execCommand('copy');
+  }
+""",
+    },
+    {
+        "slug": "remove-duplicate-lines",
+        "name": "Remove Duplicate Lines",
+        "title": "Remove Duplicate Lines Online - Free Duplicate Line Remover",
+        "desc": "Paste a list and remove repeated lines instantly. Ignore case or leading spaces if you want.",
+        "keywords": "remove duplicate lines, delete repeated lines, dedupe list online, unique lines",
+        "body": """
+      <div class="card">
+        <label for="rd-in">Your list</label>
+        <textarea id="rd-in" rows="8" placeholder="One item per line..."></textarea>
+        <label><input type="checkbox" id="rd-case"> Ignore case</label>
+        <label><input type="checkbox" id="rd-trim"> Ignore leading/trailing spaces</label>
+        <button class="btn" onclick="rdRun()">Remove duplicates</button>
+        <div class="output" id="rd-out"></div>
+      </div>
+""",
+        "script": """
+  function rdRun() {
+    const lines = document.getElementById('rd-in').value.split('\\n');
+    const ic = document.getElementById('rd-case').checked;
+    const it = document.getElementById('rd-trim').checked;
+    const seen = new Set();
+    const outLines = [];
+    let removed = 0;
+    for (let line of lines) {
+      let key = line;
+      if (it) { key = key.trim(); if (key === '') continue; }
+      if (ic) key = key.toLowerCase();
+      if (seen.has(key)) { removed++; continue; }
+      seen.add(key);
+      outLines.push(line);
+    }
+    const out = document.getElementById('rd-out');
+    out.innerHTML = '<textarea rows="8" id="rd-res"></textarea><br>' +
+      '<span class="muted">Removed ' + removed + ' duplicate line(s). ' + outLines.length + ' remain.</span>';
+    document.getElementById('rd-res').value = outLines.join('\\n');
+  }
+""",
+    },
+    {
+        "slug": "sort-lines",
+        "name": "Sort Lines",
+        "title": "Sort Lines Alphabetically Online - Free Line Sorter",
+        "desc": "Sort lines alphabetically or numerically, ascending or descending. Remove duplicates and blank lines at the same time.",
+        "keywords": "sort lines alphabetically, line sorter, sort text online, alphabetical order sorter",
+        "body": """
+      <div class="card">
+        <label for="sl-in">Your list</label>
+        <textarea id="sl-in" rows="8" placeholder="One item per line..."></textarea>
+        <label for="sl-mode">Sort</label>
+        <select id="sl-mode">
+          <option value="az">A to Z</option>
+          <option value="za">Z to A</option>
+          <option value="num">Numeric (smallest first)</option>
+          <option value="len">By length (shortest first)</option>
+        </select>
+        <label><input type="checkbox" id="sl-unique"> Remove duplicates</label>
+        <button class="btn" onclick="slRun()">Sort</button>
+        <div class="output" id="sl-out"></div>
+      </div>
+""",
+        "script": """
+  function slRun() {
+    let lines = document.getElementById('sl-in').value.split('\\n').filter(l => l.trim() !== '');
+    const mode = document.getElementById('sl-mode').value;
+    if (document.getElementById('sl-unique').checked) lines = Array.from(new Set(lines));
+    if (mode === 'az') lines.sort((a,b) => a.localeCompare(b));
+    else if (mode === 'za') lines.sort((a,b) => b.localeCompare(a));
+    else if (mode === 'num') lines.sort((a,b) => parseFloat(a) - parseFloat(b));
+    else lines.sort((a,b) => a.length - b.length);
+    const out = document.getElementById('sl-out');
+    out.innerHTML = '<textarea rows="8" id="sl-res"></textarea>';
+    document.getElementById('sl-res').value = lines.join('\\n');
+  }
+""",
+    },
+    {
+        "slug": "word-frequency-counter",
+        "name": "Word Frequency Counter",
+        "title": "Word Frequency Counter - Find Most Common Words Online",
+        "desc": "See which words appear most often in your text, ranked by count. Useful for SEO, essays and editing.",
+        "keywords": "word frequency counter, most common words, word count analysis, keyword density checker",
+        "body": """
+      <div class="card">
+        <label for="wf-in">Your text</label>
+        <textarea id="wf-in" rows="8" placeholder="Paste text here..."></textarea>
+        <label><input type="checkbox" id="wf-stop"> Ignore common words (the, and, of...)</label>
+        <button class="btn" onclick="wfRun()">Count words</button>
+        <div class="output" id="wf-out"></div>
+      </div>
+""",
+        "script": """
+  const WF_STOP = new Set('the a an and or but if in on at to of for with is are was were be been it its this that these those as by from you your we our they their he she his her i me my not no do does did can will would could should'.split(' '));
+  function wfRun() {
+    const text = document.getElementById('wf-in').value.toLowerCase();
+    const stop = document.getElementById('wf-stop').checked;
+    const words = text.match(/[a-z0-9]+/g) || [];
+    const counts = {};
+    for (const w of words) {
+      if (stop && WF_STOP.has(w)) continue;
+      if (w.length < 2) continue;
+      counts[w] = (counts[w] || 0) + 1;
+    }
+    const rows = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 100);
+    const out = document.getElementById('wf-out');
+    if (!rows.length) { out.textContent = 'No words found.'; return; }
+    out.innerHTML = '<table class="tbl"><tr><th>Word</th><th>Count</th></tr>' +
+      rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('') + '</table>';
+  }
+""",
+    },
+    {
+        "slug": "slug-generator",
+        "name": "Slug Generator",
+        "title": "URL Slug Generator - Make SEO-Friendly Slugs Online",
+        "desc": "Turn any title into a clean, SEO-friendly URL slug: lowercase, hyphenated and safe for links.",
+        "keywords": "slug generator, url slug, seo friendly url, permalink generator",
+        "body": """
+      <div class="card">
+        <label for="sg-in">Title or text</label>
+        <input id="sg-in" type="text" placeholder="e.g. 10 Best Free Online Tools!">
+        <label for="sg-sep">Separator</label>
+        <select id="sg-sep"><option value="-">Hyphen (-)</option><option value="_">Underscore (_)</option></select>
+        <button class="btn" onclick="sgRun()">Generate slug</button>
+        <div class="output" id="sg-out"></div>
+      </div>
+""",
+        "script": """
+  const sgIn = document.getElementById('sg-in');
+  sgIn.addEventListener('input', sgRun);
+  function sgRun() {
+    const sep = document.getElementById('sg-sep').value;
+    const slug = sgIn.value.toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, sep)
+      .replace(new RegExp('^' + sep + '+|' + sep + '+$', 'g'), '');
+    document.getElementById('sg-out').innerHTML = slug
+      ? '<code id="sg-res">' + slug + '</code> <button class="btn" onclick="sgCopy()">Copy</button>'
+      : 'Type a title to see the slug.';
+  }
+  function sgCopy() {
+    const t = document.getElementById('sg-res').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+  }
+""",
+    },
+    {
+        "slug": "number-to-words",
+        "name": "Number to Words",
+        "title": "Number to Words Converter - Write Numbers in English Online",
+        "desc": "Convert numbers into English words. Great for cheques, invoices and documents that need amounts in words.",
+        "keywords": "number to words, number to words converter, write numbers in english, amount in words",
+        "body": """
+      <div class="card">
+        <label for="nw-in">Number</label>
+        <input id="nw-in" type="text" placeholder="e.g. 12500">
+        <button class="btn" onclick="nwRun()">Convert</button>
+        <div class="output" id="nw-out"></div>
+      </div>
+""",
+        "script": """
+  const NW_ONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const NW_TENS = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  function nwBelow1000(n) {
+    if (n < 20) return NW_ONES[n];
+    if (n < 100) return NW_TENS[Math.floor(n/10)] + (n%10 ? '-' + NW_ONES[n%10] : '');
+    return NW_ONES[Math.floor(n/100)] + ' hundred' + (n%100 ? ' and ' + nwBelow1000(n%100) : '');
+  }
+  function nwRun() {
+    const raw = document.getElementById('nw-in').value.replace(/[^0-9]/g, '');
+    const out = document.getElementById('nw-out');
+    if (!raw) { out.textContent = 'Enter a whole number.'; return; }
+    let n = BigInt(raw);
+    if (n > 999999999999n) { out.textContent = 'Please use a smaller number.'; return; }
+    const parts = [];
+    const scales = [[1000000000n,'billion'],[1000000n,'million'],[1000n,'thousand']];
+    for (const [v, name] of scales) {
+      if (n >= v) { parts.push(nwBelow1000(Number(n/v)) + ' ' + name); n = n % v; }
+    }
+    if (n > 0n) parts.push(nwBelow1000(Number(n)));
+    out.textContent = parts.join(' ');
+  }
+""",
+    },
+    {
+        "slug": "reverse-text",
+        "name": "Reverse Text",
+        "title": "Reverse Text Online - Flip Text, Words or Lines",
+        "desc": "Reverse text by characters, words or lines instantly. Free online text reverser that works in your browser.",
+        "keywords": "reverse text, text reverser, backwards text, reverse words online",
+        "body": """
+      <div class="card">
+        <label for="rv-in">Your text</label>
+        <textarea id="rv-in" rows="6" placeholder="Type or paste text..."></textarea>
+        <label for="rv-mode">Reverse</label>
+        <select id="rv-mode">
+          <option value="chars">Characters (olleh)</option>
+          <option value="words">Words (world hello)</option>
+          <option value="lines">Lines</option>
+        </select>
+        <button class="btn" onclick="rvRun()">Reverse</button>
+        <div class="output" id="rv-out"></div>
+      </div>
+""",
+        "script": """
+  function rvRun() {
+    const t = document.getElementById('rv-in').value;
+    const mode = document.getElementById('rv-mode').value;
+    let r;
+    if (mode === 'chars') r = t.split('').reverse().join('');
+    else if (mode === 'words') r = t.split(/\\s+/).reverse().join(' ');
+    else r = t.split('\\n').reverse().join('\\n');
+    document.getElementById('rv-out').innerHTML = '<textarea rows="6" id="rv-res"></textarea>';
+    document.getElementById('rv-res').value = r;
+  }
+""",
+    },
+    {
+        "slug": "image-cropper",
+        "name": "Image Cropper",
+        "title": "Crop Image Online - Free Image Cropper",
+        "desc": "Crop a JPG or PNG to any region by choosing the coordinates. Everything happens in your browser, so nothing is uploaded.",
+        "keywords": "crop image online, image cropper, crop jpg, crop png free",
+        "body": """
+      <div class="card">
+        <input id="cr-file" type="file" accept="image/*">
+        <div class="row">
+          <label>X <input id="cr-x" type="number" value="0" style="width:80px"></label>
+          <label>Y <input id="cr-y" type="number" value="0" style="width:80px"></label>
+          <label>Width <input id="cr-w" type="number" value="200" style="width:80px"></label>
+          <label>Height <input id="cr-h" type="number" value="200" style="width:80px"></label>
+        </div>
+        <button class="btn" onclick="crRun()">Crop &amp; download</button>
+        <div class="output" id="cr-out"></div>
+      </div>
+""",
+        "script": """
+  function crRun() {
+    const file = document.getElementById('cr-file').files[0];
+    const out = document.getElementById('cr-out');
+    if (!file) { out.textContent = 'Choose an image first.'; return; }
+    const img = new Image();
+    img.onload = () => {
+      const x = +document.getElementById('cr-x').value, y = +document.getElementById('cr-y').value;
+      const w = +document.getElementById('cr-w').value, h = +document.getElementById('cr-h').value;
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.min(w, img.width - x));
+      c.height = Math.max(1, Math.min(h, img.height - y));
+      c.getContext('2d').drawImage(img, x, y, c.width, c.height, 0, 0, c.width, c.height);
+      c.toBlob(b => {
+        out.innerHTML = 'Cropped ' + c.width + ' x ' + c.height + ' px<br>' +
+          '<a href="' + URL.createObjectURL(b) + '" download="cropped.png">Download cropped image</a>';
+      });
+    };
+    img.onerror = () => out.textContent = 'Could not read that image.';
+    img.src = URL.createObjectURL(file);
+  }
+""",
+    },
+    {
+        "slug": "image-rotate-flip",
+        "name": "Rotate & Flip Image",
+        "title": "Rotate or Flip an Image Online - Free Image Rotator",
+        "desc": "Rotate an image by 90, 180 or 270 degrees, or flip it horizontally or vertically. Free and browser-based.",
+        "keywords": "rotate image online, flip image, rotate jpg, mirror image online",
+        "body": """
+      <div class="card">
+        <input id="rf-file" type="file" accept="image/*">
+        <div class="row">
+          <button class="btn" onclick="rfDo(90)">Rotate 90°</button>
+          <button class="btn" onclick="rfDo(180)">Rotate 180°</button>
+          <button class="btn" onclick="rfDo(270)">Rotate 270°</button>
+          <button class="btn" onclick="rfDo('h')">Flip horizontal</button>
+          <button class="btn" onclick="rfDo('v')">Flip vertical</button>
+        </div>
+        <div class="output" id="rf-out"></div>
+      </div>
+""",
+        "script": """
+  function rfDo(mode) {
+    const file = document.getElementById('rf-file').files[0];
+    const out = document.getElementById('rf-out');
+    if (!file) { out.textContent = 'Choose an image first.'; return; }
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      const ctx = c.getContext('2d');
+      if (mode === 'h' || mode === 'v') {
+        c.width = img.width; c.height = img.height;
+        if (mode === 'h') { ctx.translate(img.width, 0); ctx.scale(-1, 1); }
+        else { ctx.translate(0, img.height); ctx.scale(1, -1); }
+        ctx.drawImage(img, 0, 0);
+      } else {
+        const swap = mode === 90 || mode === 270;
+        c.width = swap ? img.height : img.width;
+        c.height = swap ? img.width : img.height;
+        ctx.translate(c.width/2, c.height/2);
+        ctx.rotate(mode * Math.PI / 180);
+        ctx.drawImage(img, -img.width/2, -img.height/2);
+      }
+      c.toBlob(b => {
+        out.innerHTML = '<a href="' + URL.createObjectURL(b) + '" download="rotated.png">Download image</a>';
+      });
+    };
+    img.onerror = () => out.textContent = 'Could not read that image.';
+    img.src = URL.createObjectURL(file);
+  }
+""",
+    },
+    {
+        "slug": "image-color-picker",
+        "name": "Image Color Picker",
+        "title": "Image Color Picker - Get HEX & RGB From Any Image",
+        "desc": "Upload an image and click anywhere to read the exact colour as HEX, RGB and HSL. Runs in your browser.",
+        "keywords": "image color picker, eyedropper online, get color from image, hex color picker",
+        "body": """
+      <div class="card">
+        <input id="cp-file" type="file" accept="image/*">
+        <div id="cp-holder" style="margin-top:12px"></div>
+        <div class="output" id="cp-out">Choose an image, then tap it to read the colour.</div>
+      </div>
+""",
+        "script": """
+  function cpHex(r,g,b) {
+    return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('').toUpperCase();
+  }
+  document.getElementById('cp-file').addEventListener('change', function() {
+    const file = this.files[0];
+    const holder = document.getElementById('cp-holder');
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      holder.innerHTML = '';
+      const c = document.createElement('canvas');
+      const max = 320;
+      const scale = Math.min(1, max / img.width);
+      c.width = img.width * scale; c.height = img.height * scale;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      c.style.cursor = 'crosshair'; c.style.maxWidth = '100%';
+      c.addEventListener('click', e => {
+        const rect = c.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) * (c.width / rect.width));
+        const y = Math.floor((e.clientY - rect.top) * (c.height / rect.height));
+        const d = ctx.getImageData(x, y, 1, 1).data;
+        document.getElementById('cp-out').innerHTML =
+          '<span style="display:inline-block;width:24px;height:24px;background:' + cpHex(d[0],d[1],d[2]) +
+          ';vertical-align:middle;border:1px solid #555"></span> ' +
+          '<strong>' + cpHex(d[0],d[1],d[2]) + '</strong> &middot; rgb(' + d[0] + ', ' + d[1] + ', ' + d[2] + ')';
+      });
+      holder.appendChild(c);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+""",
+    },
+    {
+        "slug": "image-to-base64",
+        "name": "Image to Base64",
+        "title": "Image to Base64 Converter - Encode Images Online",
+        "desc": "Convert a JPG or PNG into a Base64 data URI you can paste straight into HTML or CSS. Nothing is uploaded.",
+        "keywords": "image to base64, base64 encode image, data uri generator, png to base64",
+        "body": """
+      <div class="card">
+        <input id="b64-file" type="file" accept="image/*">
+        <button class="btn" onclick="b64Run()">Encode</button>
+        <div class="output" id="b64-out"></div>
+      </div>
+""",
+        "script": """
+  function b64Run() {
+    const file = document.getElementById('b64-file').files[0];
+    const out = document.getElementById('b64-out');
+    if (!file) { out.textContent = 'Choose an image first.'; return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const uri = reader.result;
+      out.innerHTML = '<textarea rows="6" id="b64-res"></textarea><br>' +
+        '<span class="muted">' + Math.round(uri.length/1024) + ' KB of text</span> ' +
+        '<button class="btn" onclick="b64Copy()">Copy</button>';
+      document.getElementById('b64-res').value = uri;
+    };
+    reader.readAsDataURL(file);
+  }
+  function b64Copy() {
+    const el = document.getElementById('b64-res');
+    el.select();
+    document.execCommand('copy');
+  }
+""",
+    },
+    {
+        "slug": "favicon-generator",
+        "name": "Favicon Generator",
+        "title": "Favicon Generator - Create a Favicon From Any Image",
+        "desc": "Turn a PNG or JPG into a 32x32 favicon. Download the .png and add it to your site in one line.",
+        "keywords": "favicon generator, create favicon, 32x32 png, website icon generator",
+        "body": """
+      <div class="card">
+        <input id="fv-file" type="file" accept="image/*">
+        <button class="btn" onclick="fvRun()">Make favicon</button>
+        <div class="output" id="fv-out"></div>
+      </div>
+""",
+        "script": """
+  function fvRun() {
+    const file = document.getElementById('fv-file').files[0];
+    const out = document.getElementById('fv-out');
+    if (!file) { out.textContent = 'Choose an image first.'; return; }
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = 32; c.height = 32;
+      const ctx = c.getContext('2d');
+      const side = Math.min(img.width, img.height);
+      const sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+      ctx.drawImage(img, sx, sy, side, side, 0, 0, 32, 32);
+      c.toBlob(b => {
+        out.innerHTML = '<img src="' + URL.createObjectURL(b) + '" width="32" height="32" alt="favicon preview"> ' +
+          '<a href="' + URL.createObjectURL(b) + '" download="favicon.png">Download favicon.png</a>' +
+          '<p class="muted">Add to your HTML head: &lt;link rel="icon" href="/favicon.png"&gt;</p>';
+      });
+    };
+    img.onerror = () => out.textContent = 'Could not read that image.';
+    img.src = URL.createObjectURL(file);
+  }
+""",
+    },
+    {
+        "slug": "meme-generator",
+        "name": "Meme Generator",
+        "title": "Meme Generator - Add Top & Bottom Text to an Image",
+        "desc": "Upload a photo, add top and bottom captions and download the meme as a PNG. No sign-up, no upload to a server.",
+        "keywords": "meme generator, add text to image, meme maker online, caption image",
+        "body": """
+      <div class="card">
+        <input id="mm-file" type="file" accept="image/*">
+        <label for="mm-top">Top text</label>
+        <input id="mm-top" type="text" placeholder="TOP TEXT">
+        <label for="mm-bottom">Bottom text</label>
+        <input id="mm-bottom" type="text" placeholder="BOTTOM TEXT">
+        <label for="mm-size">Font size: <span id="mm-sizev">48</span></label>
+        <input id="mm-size" type="range" min="16" max="96" value="48">
+        <button class="btn" onclick="mmRun()">Generate meme</button>
+        <div class="output" id="mm-out"></div>
+      </div>
+""",
+        "script": """
+  const mmSize = document.getElementById('mm-size');
+  mmSize.addEventListener('input', () => document.getElementById('mm-sizev').textContent = mmSize.value);
+  function mmText(ctx, text, y, size, w) {
+    if (!text) return;
+    ctx.font = 'bold ' + size + 'px Impact, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.lineWidth = Math.max(2, size / 12);
+    ctx.strokeStyle = 'black';
+    ctx.fillStyle = 'white';
+    ctx.strokeText(text.toUpperCase(), w/2, y);
+    ctx.fillText(text.toUpperCase(), w/2, y);
+  }
+  function mmRun() {
+    const file = document.getElementById('mm-file').files[0];
+    const out = document.getElementById('mm-out');
+    if (!file) { out.textContent = 'Choose an image first.'; return; }
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const size = +mmSize.value;
+      mmText(ctx, document.getElementById('mm-top').value, size + 10, size, c.width);
+      mmText(ctx, document.getElementById('mm-bottom').value, c.height - 15, size, c.width);
+      c.toBlob(b => {
+        out.innerHTML = '<a href="' + URL.createObjectURL(b) + '" download="meme.png">Download meme</a>';
+      });
+    };
+    img.onerror = () => out.textContent = 'Could not read that image.';
+    img.src = URL.createObjectURL(file);
+  }
+""",
+    },
+    {
+        "slug": "uuid-generator",
+        "name": "UUID Generator",
+        "title": "UUID Generator - Generate v4 UUIDs Online",
+        "desc": "Generate random version 4 UUIDs, one or many at a time, ready to copy. Uses the browser's secure random generator.",
+        "keywords": "uuid generator, generate uuid, guid generator, random uuid v4",
+        "body": """
+      <div class="card">
+        <label for="uu-n">How many</label>
+        <input id="uu-n" type="number" value="5" min="1" max="100">
+        <button class="btn" onclick="uuRun()">Generate</button>
+        <div class="output" id="uu-out"></div>
+      </div>
+""",
+        "script": """
+  function uuMake() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6] & 0x0f) | 0x40;
+    b[8] = (b[8] & 0x3f) | 0x80;
+    const h = Array.from(b).map(x => x.toString(16).padStart(2,'0')).join('');
+    return h.slice(0,8) + '-' + h.slice(8,12) + '-' + h.slice(12,16) + '-' + h.slice(16,20) + '-' + h.slice(20);
+  }
+  function uuRun() {
+    const n = Math.max(1, Math.min(100, +document.getElementById('uu-n').value || 1));
+    const list = Array.from({length:n}, uuMake);
+    document.getElementById('uu-out').innerHTML =
+      '<textarea rows="' + Math.min(12, n) + '" id="uu-res"></textarea>';
+    document.getElementById('uu-res').value = list.join('\\n');
+  }
+""",
+    },
+    {
+        "slug": "json-to-csv",
+        "name": "JSON to CSV",
+        "title": "JSON to CSV Converter - Convert JSON Arrays Online",
+        "desc": "Paste a JSON array of objects and get a CSV file back. Handles nested values by flattening them into columns.",
+        "keywords": "json to csv, convert json to csv, json csv converter online",
+        "body": """
+      <div class="card">
+        <label for="jc-in">JSON array</label>
+        <textarea id="jc-in" rows="8" placeholder='[{"name":"A","age":30},{"name":"B","age":25}]'></textarea>
+        <button class="btn" onclick="jcRun()">Convert to CSV</button>
+        <div class="output" id="jc-out"></div>
+      </div>
+""",
+        "script": """
+  function jcCell(v) {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'object') v = JSON.stringify(v);
+    const s = String(v);
+    return /[",\\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function jcRun() {
+    const out = document.getElementById('jc-out');
+    let data;
+    try { data = JSON.parse(document.getElementById('jc-in').value); }
+    catch (e) { out.textContent = 'That is not valid JSON.'; return; }
+    if (!Array.isArray(data) || !data.length) { out.textContent = 'Provide a non-empty JSON array of objects.'; return; }
+    const cols = Array.from(new Set(data.flatMap(o => (o && typeof o === 'object') ? Object.keys(o) : [])));
+    const lines = [cols.map(jcCell).join(',')];
+    for (const row of data) lines.push(cols.map(c => jcCell(row ? row[c] : '')).join(','));
+    const csv = lines.join('\\n');
+    out.innerHTML = '<textarea rows="8" id="jc-res"></textarea><br>' +
+      '<a download="data.csv" id="jc-dl">Download CSV</a>';
+    document.getElementById('jc-res').value = csv;
+    document.getElementById('jc-dl').href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  }
+""",
+    },
+    {
+        "slug": "html-minifier",
+        "name": "HTML Minifier",
+        "title": "HTML Minifier - Minify HTML Online",
+        "desc": "Strip comments and extra whitespace from HTML to make the file smaller. A quick, browser-based minifier.",
+        "keywords": "html minifier, minify html online, compress html, html optimizer",
+        "body": """
+      <div class="card">
+        <label for="hm-in">HTML</label>
+        <textarea id="hm-in" rows="8" placeholder="<div>  <p>Hello</p>  </div>"></textarea>
+        <button class="btn" onclick="hmRun()">Minify</button>
+        <div class="output" id="hm-out"></div>
+      </div>
+""",
+        "script": """
+  function hmRun() {
+    let s = document.getElementById('hm-in').value;
+    const before = s.length;
+    s = s.replace(/<!--[\\s\\S]*?-->/g, '');
+    s = s.replace(/>\\s+</g, '><');
+    s = s.replace(/\\s{2,}/g, ' ');
+    s = s.trim();
+    const out = document.getElementById('hm-out');
+    out.innerHTML = '<textarea rows="8" id="hm-res"></textarea><br>' +
+      '<span class="muted">' + before + ' → ' + s.length + ' characters (' +
+      Math.max(0, Math.round((1 - s.length/before) * 100)) + '% smaller)</span>';
+    document.getElementById('hm-res').value = s;
+  }
+""",
+    },
+    {
+        "slug": "css-minifier",
+        "name": "CSS Minifier",
+        "title": "CSS Minifier - Minify CSS Online",
+        "desc": "Remove comments and unnecessary whitespace from CSS to shrink the file. Fast and browser-based.",
+        "keywords": "css minifier, minify css online, compress css, css optimizer",
+        "body": """
+      <div class="card">
+        <label for="cm-in">CSS</label>
+        <textarea id="cm-in" rows="8" placeholder="body {  color: red;  }"></textarea>
+        <button class="btn" onclick="cmRun()">Minify</button>
+        <div class="output" id="cm-out"></div>
+      </div>
+""",
+        "script": """
+  function cmRun() {
+    let s = document.getElementById('cm-in').value;
+    const before = s.length;
+    s = s.replace(/\\/\\*[\\s\\S]*?\\*\\//g, '');
+    s = s.replace(/\\s+/g, ' ');
+    s = s.replace(/\\s*([{}:;,>])\\s*/g, '$1');
+    s = s.replace(/;}/g, '}');
+    s = s.trim();
+    const out = document.getElementById('cm-out');
+    out.innerHTML = '<textarea rows="8" id="cm-res"></textarea><br>' +
+      '<span class="muted">' + before + ' → ' + s.length + ' characters (' +
+      Math.max(0, Math.round((1 - s.length/before) * 100)) + '% smaller)</span>';
+    document.getElementById('cm-res').value = s;
+  }
+""",
+    },
+    {
+        "slug": "random-name-picker",
+        "name": "Random Name Picker",
+        "title": "Random Name Picker - Pick a Random Winner Online",
+        "desc": "Paste a list of names and pick one at random. Handy for giveaways, classrooms and team decisions.",
+        "keywords": "random name picker, random winner picker, pick a name, random picker",
+        "body": """
+      <div class="card">
+        <label for="rp-in">Names (one per line)</label>
+        <textarea id="rp-in" rows="8" placeholder="Ali&#10;Sara&#10;Rahim"></textarea>
+        <label><input type="checkbox" id="rp-no"> Don't repeat previous winner</label>
+        <button class="btn" onclick="rpRun()">Pick one</button>
+        <div class="output" id="rp-out"></div>
+      </div>
+""",
+        "script": """
+  let rpLast = null;
+  function rpRun() {
+    let names = document.getElementById('rp-in').value.split('\\n').map(s => s.trim()).filter(Boolean);
+    if (!names.length) { document.getElementById('rp-out').textContent = 'Add some names first.'; return; }
+    if (document.getElementById('rp-no').checked && names.length > 1) names = names.filter(n => n !== rpLast);
+    const pick = names[Math.floor(Math.random() * names.length)];
+    rpLast = pick;
+    document.getElementById('rp-out').innerHTML = '<strong style="font-size:1.4em">' + pick + '</strong>';
+  }
+""",
+    },
+    {
+        "slug": "dice-roller",
+        "name": "Dice Roller",
+        "title": "Dice Roller Online - Roll Virtual Dice",
+        "desc": "Roll one or more six-sided dice online. Great for board games, RPGs and quick decisions.",
+        "keywords": "dice roller, roll dice online, virtual dice, d6 roller",
+        "body": """
+      <div class="card">
+        <label for="dr-n">Number of dice</label>
+        <input id="dr-n" type="number" value="2" min="1" max="20">
+        <button class="btn" onclick="drRun()">Roll</button>
+        <div class="output" id="dr-out"></div>
+      </div>
+""",
+        "script": """
+  function drRun() {
+    const n = Math.max(1, Math.min(20, +document.getElementById('dr-n').value || 1));
+    const rolls = Array.from({length:n}, () => 1 + Math.floor(Math.random() * 6));
+    const total = rolls.reduce((a,b) => a+b, 0);
+    document.getElementById('dr-out').innerHTML =
+      '<strong style="font-size:1.4em">' + rolls.join('  ') + '</strong><br>Total: ' + total;
+  }
+""",
+    },
+    {
+        "slug": "coin-flip",
+        "name": "Coin Flip",
+        "title": "Coin Flip Online - Heads or Tails",
+        "desc": "Flip a virtual coin and get heads or tails instantly. Perfect for settling a quick decision.",
+        "keywords": "coin flip, heads or tails, flip a coin online, virtual coin toss",
+        "body": """
+      <div class="card">
+        <button class="btn" onclick="cfRun()">Flip coin</button>
+        <div class="output" id="cf-out"></div>
+      </div>
+""",
+        "script": """
+  function cfRun() {
+    const r = Math.random() < 0.5 ? 'Heads' : 'Tails';
+    document.getElementById('cf-out').innerHTML = '<strong style="font-size:1.6em">' + r + '</strong>';
+  }
+""",
+    },
+    {
+        "slug": "emoji-picker",
+        "name": "Emoji Picker",
+        "title": "Emoji Picker - Copy Emojis Instantly",
+        "desc": "Browse a grid of common emojis and copy any of them with one tap. Works on any device.",
+        "keywords": "emoji picker, copy emoji, emoji list, emoji keyboard online",
+        "body": """
+      <div class="card">
+        <div id="ep-grid" class="row"></div>
+        <div class="output" id="ep-out">Tap an emoji to copy it.</div>
+      </div>
+""",
+        "script": """
+  const EP = '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 😉 😍 🥰 😘 😜 😎 🤩 🥳 😏 😢 😭 😤 😡 🤔 🤗 🤭 🤫 😴 🤤 😱 🤯 🥺 😬 🙄 😌 👍 👎 👏 🙌 🤝 💪 🙏 ✌️ 🤞 👌 👋 🖐️ ✨ ⭐ 🌟 💫 🔥 💧 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 💔 💯 ✅ ❌ ⚠️ ❓ ❗ 🎉 🎊 🎁 🎂 🍕 🍔 🍟 🍎 🍌 🍇 ☕ 🍵 🍦 🍫 🌞 🌝 🌚 🌈 ☁️ 🌧️ ❄️ ⚡ 🌊 🌸 🌹 🌻 🐶 🐱 🐭 🐰 🦊 🐻 🐼 🐨 🦁 🐮 🐷 🐸 🐵 🐔 🐧 🐦 🦄 🐝 🦋 🚀 ✈️ 🚗 🚕 🚌 🚲 ⚽ 🏀 🎾 🎮 🎸 🎧 📱 💻 ⌨️ 🖱️ 📷 🔋 💡 🔑 🔒 📌 📎 📖 📝 ✏️ 📅 ⏰ 💰 💳 🛒 🎯 🏆 🥇 🥈 🥉 🎓 🏠 🏢 🗺️ 🧭 🧪 🔬 🩺 💊 🌍 🌎 🌏 🕌 🕋 📿'.split(' ');
+  (function() {
+    const grid = document.getElementById('ep-grid');
+    grid.innerHTML = EP.map(e => '<button class="btn" style="font-size:1.4em" data-e="' + e + '">' + e + '</button>').join('');
+    grid.addEventListener('click', ev => {
+      const e = ev.target.getAttribute && ev.target.getAttribute('data-e');
+      if (!e) return;
+      if (navigator.clipboard) navigator.clipboard.writeText(e);
+      document.getElementById('ep-out').innerHTML = 'Copied: <strong style="font-size:1.5em">' + e + '</strong>';
+    });
+  })();
+""",
+    },
 ]
 
 CSS = """
@@ -1228,6 +1985,9 @@ label { display:block; margin:8px 0; color:var(--muted); }
 .output { background:#0b1220; border-radius:8px; padding:14px; margin-top:12px; white-space:pre-wrap; word-break:break-word; }
 .qr-box { text-align:center; margin-top:16px; }
 .qr-box img { background:#fff; padding:8px; border-radius:8px; }
+.tbl { border-collapse:collapse; width:100%; }
+.tbl th, .tbl td { border:1px solid #334155; padding:6px 10px; text-align:left; }
+.tbl th { background:#0b1220; }
 .ad { background:#0b1220; border:1px dashed #334155; color:var(--muted); text-align:center; padding:18px; border-radius:10px; margin:18px 0; font-size:.85rem; }
 footer { border-top:1px solid #1e293b; color:var(--muted); padding:24px 20px; text-align:center; font-size:.85rem; }
 footer a { color:var(--muted); margin:0 8px; }
@@ -1719,451 +2479,89 @@ from there.</p>""",
             ("How many lines fit?", "Up to 48 lines on one page. Longer text is trimmed, so split it into separate files."),
         ],
     },
-}
-
-
-def ga_snippet() -> str:
-    if not GA_MEASUREMENT_ID:
-        return ""
-    return f"""<script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){{dataLayer.push(arguments);}}
-gtag('js', new Date());
-gtag('config', '{GA_MEASUREMENT_ID}');
-</script>"""
-
-
-def verification_meta() -> str:
-    """Meta tags that prove site ownership to search engines.
-
-    Set GOOGLE_SITE_VERIFICATION / BING_SITE_VERIFICATION to the content value
-    from each console. Empty values produce nothing.
-    """
-    tags = []
-    if GOOGLE_SITE_VERIFICATION:
-        tags.append(f'<meta name="google-site-verification" content="{html.escape(GOOGLE_SITE_VERIFICATION)}">')
-    if BING_SITE_VERIFICATION:
-        tags.append(f'<meta name="msvalidate.01" content="{html.escape(BING_SITE_VERIFICATION)}">')
-    return "\n".join(tags)
-
-
-def cookie_banner() -> str:
-    """Consent notice shown until the visitor dismisses it.
-
-    Third-party ad networks may set cookies, so most networks and privacy laws
-    (for example GDPR in the EU) expect a notice. The choice is stored in
-    localStorage and is per browser.
-    """
-    return """<div id="cookie-bar" class="cookie-bar" hidden>
-  <span>This site uses cookies for analytics and advertising. By continuing you agree to the
-  <a href="/privacy/">privacy policy</a>.</span>
-  <button class="btn" onclick="cookieOk()">Got it</button>
-</div>
-<script>
-(function(){
-  try {
-    if (!localStorage.getItem('cookie-ok')) document.getElementById('cookie-bar').hidden = false;
-  } catch (e) { document.getElementById('cookie-bar').hidden = false; }
-})();
-function cookieOk() {
-  try { localStorage.setItem('cookie-ok','1'); } catch (e) {}
-  document.getElementById('cookie-bar').hidden = true;
-}
-</script>"""
-
-
-def favicon_data_uri() -> str:
-    """A small square favicon generated as a PNG data URI, no binary asset needed."""
-    size, bg, fg = 32, (15, 23, 42), (56, 189, 248)
-    rows = b""
-    for y in range(size):
-        rows += b"\x00"
-        for x in range(size):
-            edge = 3 <= x <= 28 and 3 <= y <= 28
-            inner = 9 <= x <= 22 and 9 <= y <= 22
-            color = fg if inner else bg if edge else None
-            rows += bytes(color + (255,)) if color else b"\x00\x00\x00\x00"
-    def chunk(tag, data):
-        body = tag + data
-        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
-    ihdr = struct.pack(">IIBBBBB", size, size, 8, 6, 0, 0, 0)
-    png = (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr)
-           + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b""))
-    import base64
-    return "data:image/png;base64," + base64.b64encode(png).decode()
-
-
-def page(title: str, desc: str, keywords: str, body: str, canonical: str,
-         extra_script: str = "", extra_head: str = "") -> str:
-    """Render a full HTML page. Ad slot markup lives here."""
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(title)}</title>
-<meta name="description" content="{html.escape(desc)}">
-<meta name="keywords" content="{html.escape(keywords)}">
-<link rel="canonical" href="{canonical}">
-{verification_meta()}
-<meta property="og:title" content="{html.escape(title)}">
-<meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:type" content="website">
-<meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{favicon_data_uri()}">
-<meta name="twitter:card" content="summary">
-<link rel="icon" href="{favicon_data_uri()}">
-<link rel="stylesheet" href="/style.css">
-{AD_HEADER}
-{ga_snippet()}
-{extra_head}
-</head>
-<body>
-<header>
-  <div class="brand"><a href="/">{SITE_NAME}</a></div>
-  <nav>
-    <a href="/">Tools</a>
-    <a href="/convert/">Converters</a>
-    <a href="/about/">About</a>
-    <a href="/privacy/">Privacy</a>
-    <a href="/contact/">Contact</a>
-  </nav>
-</header>
-<main>
-{body}
-  <div class="ad">{AD_INARTICLE or 'Ad space (paste your ad network code here)'}</div>
-</main>
-<footer>
-  <div class="ad">{AD_FOOTER or 'Ad space'}</div>
-  <p>&copy; {SITE_NAME}. <a href="/privacy/">Privacy</a> <a href="/about/">About</a> <a href="/contact/">Contact</a></p>
-</footer>
-{cookie_banner()}
-{('<script>' + extra_script + '</script>') if extra_script else ''}
-</body>
-</html>
-"""
-
-
-def home_body() -> str:
-    cards = "\n".join(
-        f'      <a class="card tool-card" href="/{t["slug"]}/"><h3>{html.escape(t["name"])}</h3><p>{html.escape(t["desc"].split(".")[0])}.</p></a>'
-        for t in TOOLS
-    )
-    return f"""  <h1>Free Online Tools</h1>
-  <p>Handy browser tools that work instantly — no sign-up required.</p>
-  <div class="ad">{AD_SIDEBAR or 'Ad space (top)'}</div>
-  <div class="grid">
-{cards}
-  </div>
-  <h2>Popular unit converters</h2>
-  <p>Dedicated pages for the conversions people search most, each with a table and formula.</p>
-  <div class="row">
-    <a href="/cm-to-inches/">CM to Inches</a>
-    <a href="/kg-to-pounds/">KG to Pounds</a>
-    <a href="/celsius-to-fahrenheit/">Celsius to Fahrenheit</a>
-    <a href="/km-to-miles/">KM to Miles</a>
-    <a href="/convert/">All converters</a>
-  </div>
-"""
-
-
-def faq_jsonld(faqs: list) -> str:
-    data = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": q,
-                "acceptedAnswer": {"@type": "Answer", "text": a},
-            }
-            for q, a in faqs
+    "text-repeater": {
+        "h2": "When to repeat text",
+        "body": """<p>Repeating a line is handy more often than you would think. People use it to fill
+space, to build patterns and to test layouts.</p>
+<ul>
+<li>Filling a form that demands a minimum number of characters</li>
+<li>Creating repeated patterns for design or art</li>
+<li>Testing how a long list looks before adding real data</li>
+<li>Making a "spam" joke with a word repeated hundreds of times</li>
+</ul>
+<h3>Choose the right separator</h3>
+<p>Use a new line when each copy should stand alone, a space when the copies form one long
+run, and no separator when you want the text joined into a single string.</p>""",
+        "faqs": [
+            ("How many times can I repeat text?", "Up to 500 times in one go. Very long output may slow down older phones."),
+            ("Is my text sent anywhere?", "No, the repeating happens in your browser."),
+            ("Can I repeat a whole paragraph?", "Yes, paste any amount of text and it is treated as one block."),
         ],
-    }
-    return f'<script type="application/ld+json">{json.dumps(data)}</script>'
-
-
-def article_block(slug: str) -> str:
-    art = ARTICLES.get(slug)
-    if not art:
-        return ""
-    faqs = "\n".join(
-        f'    <details><summary>{html.escape(q)}</summary><p>{a}</p></details>'
-        for q, a in art["faqs"]
-    )
-    return f"""  <article class="card prose">
-    <h2>{html.escape(art["h2"])}</h2>
-{art["body"]}
-    <h2>Frequently asked questions</h2>
-{faqs}
-  </article>
-"""
-
-
-def conversion_page(c: dict) -> str:
-    """A dedicated SEO page for one unit conversion query (e.g. cm to inches)."""
-    rows = "\n".join(
-        f"        <tr><td>{fmt(v)} {c['from']}</td><td>{fmt(convert_value(c, v))} {c['to']}</td></tr>"
-        for v in c["table"]
-    )
-    faqs = "\n".join(
-        f'    <details><summary>{html.escape(q)}</summary><p>{a}</p></details>'
-        for q, a in c["faqs"]
-    )
-    related = [x for x in CONVERSIONS if x["category"] == c["category"] and x["slug"] != c["slug"]]
-    rel_links = "\n".join(
-        f'      <a href="/{r["slug"]}/">{html.escape(r["name"])}</a>' for r in related
-    )
-    body = f"""  <h1>{html.escape(c["name"])}</h1>
-  <p>{html.escape(c["desc"])}</p>
-  <div class="card">
-    <div class="row">
-      <input id="cv-val" type="number" value="1" style="max-width:160px">
-      <span>{html.escape(c["from"])} =</span>
-      <strong id="cv-out"></strong>
-      <span>{html.escape(c["to"])}</span>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Conversion table</h3>
-    <table class="conv-table">
-      <thead><tr><th>{html.escape(c["from"])}</th><th>{html.escape(c["to"])}</th></tr></thead>
-      <tbody>
-{rows}
-      </tbody>
-    </table>
-  </div>
-  <article class="card prose">
-    <h2>How to convert {html.escape(c["from"])} to {html.escape(c["to"])}</h2>
-    <p>Use the formula <strong>{html.escape(c["formula"])}</strong>. Type any value in the box
-    above and the answer updates instantly.</p>
-    <p>{html.escape(c["desc"])}</p>
-    <h2>Frequently asked questions</h2>
-{faqs}
-  </article>
-  <div class="card">
-    <h3>Related conversions</h3>
-    <div class="row">
-{rel_links}
-    </div>
-  </div>
-"""
-    script = _cv_js(c)
-    extra_head = faq_jsonld(c["faqs"])
-    return page(
-        c["title"], c["desc"], c["keywords"], body,
-        f"{SITE_URL}/{c['slug']}/", script, extra_head,
-    )
-
-
-def _cv_js(c: dict) -> str:
-    """Inline JS that converts the input value, handling temperature separately."""
-    if c.get("kind") == "temp":
-        f, t = c["from"], c["to"]
-        if f == "C" and t == "F":
-            expr = "v * 9 / 5 + 32"
-        elif f == "F" and t == "C":
-            expr = "(v - 32) * 5 / 9"
-        elif f == "C" and t == "K":
-            expr = "v + 273.15"
-        else:
-            expr = "v"
-    else:
-        expr = f"v * {c['factor']}"
-    return (
-        "  function cvRun() {\n"
-        "    const v = parseFloat(document.getElementById('cv-val').value);\n"
-        "    const el = document.getElementById('cv-out');\n"
-        f"    el.textContent = isNaN(v) ? '—' : (+({expr}).toFixed(6));\n"
-        "  }\n"
-        "  document.getElementById('cv-val').addEventListener('input', cvRun);\n"
-        "  cvRun();\n"
-    )
-
-
-def conversion_index() -> str:
-    """A hub page listing every conversion page, grouped by category."""
-    cats: dict = {}
-    for c in CONVERSIONS:
-        cats.setdefault(c["category"], []).append(c)
-    sections = ""
-    for cat, items in cats.items():
-        links = "\n".join(
-            f'      <a class="card tool-card" href="/{c["slug"]}/"><h3>{html.escape(c["name"])}</h3>'
-            f'<p>{html.escape(c["desc"].split(".")[0])}.</p></a>'
-            for c in items
-        )
-        sections += f'  <h2>{html.escape(cat)}</h2>\n  <div class="grid">\n{links}\n  </div>\n'
-    body = f"""  <h1>Unit Converters</h1>
-  <p>Free, instant conversion pages for the queries people search most. Each one has a
-  calculator, a reference table and the formula.</p>
-{sections}"""
-    return page(
-        f"Unit Converters - {SITE_NAME}",
-        "Free unit conversion pages: cm to inches, kg to pounds, Celsius to Fahrenheit and more, each with a table and formula.",
-        "unit converter, cm to inches, kg to pounds, celsius to fahrenheit",
-        body, f"{SITE_URL}/convert/",
-    )
-
-
-def tool_page(tool: dict) -> str:
-    others = "\n".join(
-        f'      <a href="/{o["slug"]}/">{html.escape(o["name"])}</a>'
-        for o in TOOLS if o["slug"] != tool["slug"]
-    )
-    body = f"""  <h1>{html.escape(tool["name"])}</h1>
-  <p>{html.escape(tool["desc"])}</p>
-{tool["body"]}
-{article_block(tool["slug"])}
-  <div class="card">
-    <h3>Other tools</h3>
-    <div class="row">
-{others}
-    </div>
-  </div>
-"""
-    art = ARTICLES.get(tool["slug"])
-    extra_head = faq_jsonld(art["faqs"]) if art else ""
-    return page(
-        tool["title"], tool["desc"], tool["keywords"], body,
-        f"{SITE_URL}/{tool['slug']}/", tool["script"], extra_head,
-    )
-
-
-LEGAL = {
-    "about": (
-        "About",
-        "About this site, who runs it and what it offers.",
-        """<h1>About</h1>
-<p>This site offers free browser-based tools to help with everyday tasks such as
-counting words, converting text, generating QR codes and creating passwords.</p>
-<p>All tools run entirely in your browser. We do not store the text you enter.</p>
-<p>Replace this text with a short introduction about you and why you built the site.
-A clear, honest About page improves trust and helps with ad-network approval.</p>""",
-    ),
-    "privacy": (
-        "Privacy Policy",
-        "How this site handles data, cookies and third-party advertising.",
-        """<h1>Privacy Policy</h1>
-<p>Last updated: 2026.</p>
-<h2>Information we collect</h2>
-<p>The tools on this site run in your browser. Text you type into a tool is not
-uploaded to our servers.</p>
-<h2>Cookies and advertising</h2>
-<p>We may display advertising through third-party ad networks. These networks may
-use cookies or similar technologies to show ads based on your prior visits to
-this and other websites. You can opt out of personalised advertising through your
-browser settings or the ad network's own opt-out page.</p>
-<h2>Analytics</h2>
-<p>We may use privacy-respecting analytics to understand aggregate traffic. This
-data does not personally identify you.</p>
-<h2>Your choices</h2>
-<p>You can disable cookies in your browser at any time. Doing so may affect how
-ads are shown but will not stop the tools from working.</p>
-<h2>Contact</h2>
-<p>Questions about this policy? Use the Contact page.</p>""",
-    ),
-    "contact": (
-        "Contact",
-        "Get in touch with the team behind this site.",
-        f"""<h1>Contact</h1>
-<p>Have a question, found a bug, or want a new tool? Email us at
-<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>.</p>
-<p>Replace this email with your real address before publishing.</p>""",
-    ),
-}
-
-
-def build() -> None:
-    if SITE.exists():
-        shutil.rmtree(SITE)
-    SITE.mkdir(parents=True)
-
-    (SITE / "style.css").write_text(CSS.strip() + "\n", encoding="utf-8")
-    (SITE / ".nojekyll").write_text("", encoding="utf-8")
-
-    (SITE / "index.html").write_text(
-        page(
-            f"{SITE_NAME} - Free Online Tools",
-            "A collection of free, fast, browser-based tools: word counter, case converter, QR code generator, password generator and more.",
-            "free online tools, word counter, qr code generator, password generator",
-            home_body(),
-            f"{SITE_URL}/",
-        ),
-        encoding="utf-8",
-    )
-
-    for tool in TOOLS:
-        d = SITE / tool["slug"]
-        d.mkdir()
-        (d / "index.html").write_text(tool_page(tool), encoding="utf-8")
-
-    for c in CONVERSIONS:
-        d = SITE / c["slug"]
-        d.mkdir()
-        (d / "index.html").write_text(conversion_page(c), encoding="utf-8")
-
-    d = SITE / "convert"
-    d.mkdir()
-    (d / "index.html").write_text(conversion_index(), encoding="utf-8")
-
-    for slug, (title, desc, body) in LEGAL.items():
-        d = SITE / slug
-        d.mkdir()
-        (d / "index.html").write_text(
-            page(f"{title} - {SITE_NAME}", desc, "", body, f"{SITE_URL}/{slug}/"),
-            encoding="utf-8",
-        )
-
-    (SITE / "sitemap.xml").write_text(sitemap(), encoding="utf-8")
-    (SITE / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8"
-    )
-
-    # A 404.html stops hosts like Cloudflare Pages from serving the home page
-    # (with a 200) for every unknown URL. Without it, a missing verification
-    # file looks like it exists, and search engines index junk paths.
-    (SITE / "404.html").write_text(
-        page(
-            f"Page not found - {SITE_NAME}",
-            "The page you were looking for does not exist.",
-            "",
-            "<h1>Page not found</h1>"
-            "<p>That page does not exist. Try the "
-            f'<a href="/">home page</a> or the <a href="/convert/">converters</a>.</p>',
-            f"{SITE_URL}/404.html",
-        ),
-        encoding="utf-8",
-    )
-
-    # Search Console "HTML file" verification: emit the exact file Google asked
-    # for, at the site root, with the expected content.
-    pages = len(list(SITE.rglob("*.html")))
-    if GOOGLE_SITE_VERIFICATION_FILE:
-        name = os.path.basename(GOOGLE_SITE_VERIFICATION_FILE)
-        (SITE / name).write_text(
-            f"google-site-verification: {name}\n", encoding="utf-8"
-        )
-
-    print(f"Built {pages} pages into {SITE}")
-
-
-def sitemap() -> str:
-    urls = [f"{SITE_URL}/"]
-    urls += [f"{SITE_URL}/{t['slug']}/" for t in TOOLS]
-    urls += [f"{SITE_URL}/{c['slug']}/" for c in CONVERSIONS]
-    urls.append(f"{SITE_URL}/convert/")
-    urls += [f"{SITE_URL}/{s}/" for s in LEGAL]
-    items = "\n".join(
-        f"  <url><loc>{u}</loc><changefreq>weekly</changefreq></url>" for u in urls
-    )
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"{items}\n</urlset>\n"
-    )
-
-
-if __name__ == "__main__":
-    build()
+    },
+    "remove-duplicate-lines": {
+        "h2": "Cleaning up a list",
+        "body": """<p>Duplicate lines creep into lists when you merge files, export data or copy from
+several sources. This tool keeps the first copy of each line and drops the rest.</p>
+<h3>Options explained</h3>
+<ul>
+<li><strong>Ignore case</strong> treats "Apple" and "apple" as the same line.</li>
+<li><strong>Ignore spaces</strong> treats " apple " and "apple" as the same, and drops blank lines.</li>
+</ul>
+<p>Order is preserved, so the first time a value appears is where it stays.</p>""",
+        "faqs": [
+            ("Does it sort the list?", "No, it only removes duplicates and keeps the original order. Use the line sorter for ordering."),
+            ("Are blank lines removed?", "Only when you tick the option to ignore leading and trailing spaces."),
+            ("Is there a size limit?", "No hard limit, but extremely large lists may take a moment on a phone."),
+        ],
+    },
+    "sort-lines": {
+        "h2": "Sorting text the easy way",
+        "body": """<p>Sorting a list by hand is slow and error-prone. Paste the list, pick an order and
+the job is done.</p>
+<ul>
+<li><strong>A to Z</strong> and <strong>Z to A</strong> for names and words</li>
+<li><strong>Numeric</strong> for numbers, so 10 comes after 9 instead of after 1</li>
+<li><strong>By length</strong> to group short and long entries</li>
+</ul>
+<h3>Remove duplicates at the same time</h3>
+<p>Tick the box and the sorter drops repeated lines before sorting, which is the quickest way
+to turn a messy list into a clean one.</p>""",
+        "faqs": [
+            ("Does A to Z work for non-English text?", "Yes, it uses your browser's locale-aware sorting, which handles accented letters correctly."),
+            ("Are blank lines kept?", "No, empty lines are removed automatically."),
+            ("Can I sort numbers?", "Yes, choose the Numeric option so values sort by size rather than as text."),
+        ],
+    },
+    "word-frequency-counter": {
+        "h2": "Why count word frequency",
+        "body": """<p>Seeing which words you use most is one of the fastest ways to improve writing.
+It shows repetition you did not notice and reveals the real topic of a piece.</p>
+<h3>Common uses</h3>
+<ul>
+<li>Editors spotting overused words</li>
+<li>Writers checking keyword use without stuffing</li>
+<li>Students studying the vocabulary of a text</li>
+</ul>
+<h3>About stop words</h3>
+<p>Short, common words like "the", "and" and "of" often top the list without meaning anything.
+Tick the option to ignore them and the interesting words rise to the top.</p>""",
+        "faqs": [
+            ("What counts as a word?", "Any run of letters or digits. Punctuation is ignored."),
+            ("How many words are shown?", "The top 100, ranked from most to least frequent."),
+            ("Is my text uploaded?", "No, everything is counted in your browser."),
+        ],
+    },
+    "slug-generator": {
+        "h2": "What makes a good slug",
+        "body": """<p>A slug is the part of a web address that names the page, such as
+<code>/free-online-tools</code>. A good slug is short, readable and made only of lowercase
+letters, numbers and hyphens.</p>
+<h3>Why slugs matter</h3>
+<ul>
+<li>They appear in search results, so people read them</li>
+<li>Words in the slug can help a page rank for those words</li>
+<li>Clean slugs are easier to share and remember</li>
+</ul>
+<p>This tool lowercases the text, replaces spaces and punctuation with your chosen separator
+and trims stray 
+Preview truncated for large file
