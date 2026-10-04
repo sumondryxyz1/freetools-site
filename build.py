@@ -2121,6 +2121,22 @@ def build() -> None:
         f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8"
     )
 
+    # A 404.html stops hosts like Cloudflare Pages from serving the home page
+    # (with a 200) for every unknown URL. Without it, a missing verification
+    # file looks like it exists, and search engines index junk paths.
+    (SITE / "404.html").write_text(
+        page(
+            f"Page not found - {SITE_NAME}",
+            "The page you were looking for does not exist.",
+            "",
+            "<h1>Page not found</h1>"
+            "<p>That page does not exist. Try the "
+            f'<a href="/">home page</a> or the <a href="/convert/">converters</a>.</p>',
+            f"{SITE_URL}/404.html",
+        ),
+        encoding="utf-8",
+    )
+
     # Search Console "HTML file" verification: emit the exact file Google asked
     # for, at the site root, with the expected content.
     pages = len(list(SITE.rglob("*.html")))
