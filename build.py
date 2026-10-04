@@ -303,6 +303,17 @@ SITE_NAME = os.environ.get("SITE_NAME", "ToolBox")
 GA_MEASUREMENT_ID = os.environ.get("GA_MEASUREMENT_ID", "")
 # ------------------------------------------------------------------------
 
+# --- Search Console verification ----------------------------------------
+# Google Search Console gives you a meta tag with a content value. Set
+# GOOGLE_SITE_VERIFICATION to that value (the part inside content="...") and
+# every page will carry the tag. Bing uses the same idea: BING_SITE_VERIFICATION.
+GOOGLE_SITE_VERIFICATION = os.environ.get("GOOGLE_SITE_VERIFICATION", "")
+BING_SITE_VERIFICATION = os.environ.get("BING_SITE_VERIFICATION", "")
+# Google also offers "HTML file" verification. Set this to the downloaded file
+# name (for example "google3e2e52f02618f536.html") and the build creates it.
+GOOGLE_SITE_VERIFICATION_FILE = os.environ.get("GOOGLE_SITE_VERIFICATION_FILE", "")
+# ------------------------------------------------------------------------
+
 TOOLS = [
     {
         "slug": "word-counter",
@@ -1723,6 +1734,20 @@ gtag('config', '{GA_MEASUREMENT_ID}');
 </script>"""
 
 
+def verification_meta() -> str:
+    """Meta tags that prove site ownership to search engines.
+
+    Set GOOGLE_SITE_VERIFICATION / BING_SITE_VERIFICATION to the content value
+    from each console. Empty values produce nothing.
+    """
+    tags = []
+    if GOOGLE_SITE_VERIFICATION:
+        tags.append(f'<meta name="google-site-verification" content="{html.escape(GOOGLE_SITE_VERIFICATION)}">')
+    if BING_SITE_VERIFICATION:
+        tags.append(f'<meta name="msvalidate.01" content="{html.escape(BING_SITE_VERIFICATION)}">')
+    return "\n".join(tags)
+
+
 def cookie_banner() -> str:
     """Consent notice shown until the visitor dismisses it.
 
@@ -1781,6 +1806,7 @@ def page(title: str, desc: str, keywords: str, body: str, canonical: str,
 <meta name="description" content="{html.escape(desc)}">
 <meta name="keywords" content="{html.escape(keywords)}">
 <link rel="canonical" href="{canonical}">
+{verification_meta()}
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:type" content="website">
@@ -2094,7 +2120,17 @@ def build() -> None:
     (SITE / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8"
     )
-    print(f"Built {len(list(SITE.rglob('*.html')))} pages into {SITE}")
+
+    # Search Console "HTML file" verification: emit the exact file Google asked
+    # for, at the site root, with the expected content.
+    pages = len(list(SITE.rglob("*.html")))
+    if GOOGLE_SITE_VERIFICATION_FILE:
+        name = os.path.basename(GOOGLE_SITE_VERIFICATION_FILE)
+        (SITE / name).write_text(
+            f"google-site-verification: {name}\n", encoding="utf-8"
+        )
+
+    print(f"Built {pages} pages into {SITE}")
 
 
 def sitemap() -> str:
