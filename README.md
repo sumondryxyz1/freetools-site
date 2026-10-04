@@ -15,4 +15,4 @@ https://freetools-site.pages.dev
 Environment variable CONTACT_EMAIL
 sumondryxyz@gmail.com
 Ads
-Paste your ad-network snippets into the AD_HEADER, AD_INARTICLE, AD_SIDEBAR and AD_FOOTER constants near the top of build.py.
+Paste your ad-network snippets into the AD_HEADER, AD_INARTICLE, AD_SIDEBAR and AD_FOOTER constants near the top of build.py. 
